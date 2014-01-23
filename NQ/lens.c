@@ -295,7 +295,8 @@ void L_InitLua(void)
    luaL_openlibs(lua);
 
    // initialize LuaJIT
-   luaopen_jit(lua);
+   lua_pushcfunction(lua, luaopen_jit);
+   lua_call(lua, 0, 0);
 
    // initialize LuaJIT optimizer 
    char *cmd = "require(\"jit.opt\").start()";
