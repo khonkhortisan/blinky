@@ -23,9 +23,9 @@
 #include "sys.h"
 #include "view.h"
 
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include <luajit-2.0/lua.h>
+#include <luajit-2.0/lauxlib.h>
+#include <luajit-2.0/lualib.h>
 
 // the Lua state pointer
 lua_State *lua;
