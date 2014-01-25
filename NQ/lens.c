@@ -18,7 +18,27 @@
 #include "lens.h"
 #include "mathlib.h"
 #include "quakedef.h"
-#include "r_local.h"
+
+
+#ifndef GLQUAKE
+	#include "r_local.h"
+#else
+	//why is this greyed out in eclipse? And why can't eclipse simply run make?
+	//Why does video options not appear, and then crash if I make it appear?
+
+	//#include "../common/d_init.c"
+	//#include "d_iface.h"
+	//#include "render.h" //for R_SetVrect, R_ViewChanged which are in r_main.c not gl_rmain.c UGH
+		//Never ever make multiple main... afk, didn't finish the sentence.
+	//#include "r_main.c"
+	//d_local? glr_local?
+	#include "zone.h" //for Z_Malloc, Hunk_TempAlloc
+	//or include the below - vidwin.c uses d_local.h, while glvidnt.c uses these
+	//#include "draw.h"
+	//#include "glquake.h"
+#endif
+
+
 #include "screen.h"
 #include "sys.h"
 #include "view.h"
@@ -618,7 +638,8 @@ void SaveGlobe(void)
 
    save_globe = 0;
 
-    D_EnableBackBufferAccess();	// enable direct drawing of console to back
+    //D_EnableBackBufferAccess();	// enable direct drawing of console to back
+    VID_LockBuffer();
 
    for (i=0; i<numplates; ++i) 
    {
@@ -628,8 +649,9 @@ void SaveGlobe(void)
     Con_Printf("Wrote %s\n", pcxname);
    }
 
-    D_DisableBackBufferAccess();	// for adapters that can't stay mapped in
+    //D_DisableBackBufferAccess();	// for adapters that can't stay mapped in
     //  for linear writes all the time
+    VID_UnlockBuffer();
 }
 
 void L_Globe(void)
@@ -1781,7 +1803,11 @@ void L_RenderView()
    vrect.y = 0;
    vrect.width = vid.width;
    vrect.height = vid.height;
+#ifndef GLQUAKE
    R_SetVrect(&vrect, &scr_vrect, sb_lines);
+#else
+   printf("R_SetVRect(&vrect, &scr_vrect, sb_lines);\n");
+#endif
 
    // render plates
    int i;
@@ -1794,7 +1820,17 @@ void L_RenderView()
 
          // set view to change plate FOV
          renderfov = p->fov;
+#ifndef GLQUAKE
          R_ViewChanged(&vrect, sb_lines, vid.aspect);
+#else
+         printf("R_ViewChanged(&vrect, sb_lines, vid.aspect);\n");
+         /* it didn't set up the camera using these two functions
+          * for render_plate to render using R_RenderView();
+          * then copy that render buffer to plate then repeat
+          * then render using lens distortion, taking pixels from the nearest plate
+          * to draw not render to the final (what's it stored in?) lens "render"
+          */
+#endif
 
          // compute absolute view vectors
          // right = x

@@ -1842,6 +1842,7 @@ VID_MenuDraw
 static void
 VID_MenuDraw(void)
 {
+	printf("gl_vidnt.c VID_MenuDraw\n");
     qpic_t *p;
     char *ptr;
     int lnummodes, i, k, column, row;

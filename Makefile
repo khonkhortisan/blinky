@@ -18,7 +18,7 @@ TYR_VERSION = $(TYR_VERSION_MAJOR).$(TYR_VERSION_MINOR)$(TYR_VERSION_BUILD)
 
 BUILD_DIR        ?= build
 
-DEBUG            ?= N# Compile with debug info
+DEBUG            ?= Y# Compile with debug info
 OPTIMIZED_CFLAGS ?= Y# Enable compiler optimisations (if DEBUG != Y)
 USE_X86_ASM      ?= $(I386_GUESS)
 X11BASE          ?= $(X11BASE_GUESS)

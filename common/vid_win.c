@@ -2901,6 +2901,7 @@ VID_MenuDraw
 static void
 VID_MenuDraw(void)
 {
+	printf("vid_win.c VID_MenuDraw\n");
     qpic_t *p;
     char *ptr;
     int lnummodes, i, j, k, column, row, dup, dupmode;
