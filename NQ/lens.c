@@ -508,7 +508,7 @@ static struct stree_root * L_LensArg(const char *arg)
 {
    struct stree_root *root;
 
-   root = Z_Malloc(sizeof(struct stree_root));
+   root = (struct stree_root*)Z_Malloc(sizeof(struct stree_root));
    if (root) {
       *root = STREE_ROOT;
 
@@ -574,7 +574,7 @@ void WritePCXplate(char *filename, int plate_index, int full)
     pcx_t *pcx;
     byte *pack;
 
-    pcx = Hunk_TempAlloc(width * height * 2 + 1000);
+    pcx = (pcx_t*)Hunk_TempAlloc(width * height * 2 + 1000);
     if (pcx == NULL) {
 	Con_Printf("SCR_ScreenShot_f: not enough memory\n");
 	return;
@@ -682,7 +682,7 @@ static struct stree_root * L_GlobeArg(const char *arg)
 {
    struct stree_root *root;
 
-   root = Z_Malloc(sizeof(struct stree_root));
+   root = (struct stree_root*)Z_Malloc(sizeof(struct stree_root));
    if (root) {
       *root = STREE_ROOT;
 
@@ -1553,8 +1553,8 @@ void drawQuad(int *tl, int *tr, int *bl, int *br,
 
 void create_lensmap_forward()
 {
-   int *rowa = malloc((platesize+1)*sizeof(int[2]));
-   int *rowb = malloc((platesize+1)*sizeof(int[2]));
+   int *rowa = (int*)malloc((platesize+1)*sizeof(int[2]));
+   int *rowb = (int*)malloc((platesize+1)*sizeof(int[2]));
    int *top = rowa;
    int *bot = rowb;
 
