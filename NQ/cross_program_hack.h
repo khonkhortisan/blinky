@@ -27,6 +27,9 @@
     //or include the below - vidwin.c uses d_local.h, while glvidnt.c uses these
     //#include "draw.h"
     //#include "glquake.h"
+
+	//glReadBuffer
+	#include "GL/gl.h"
   #endif
 
   #include "screen.h"

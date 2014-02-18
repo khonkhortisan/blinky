@@ -1676,6 +1676,12 @@ void create_lensmap()
 // draw the lensmap to the vidbuffer
 void render_lensmap()
 {
+#ifdef GLQUAKE
+   //glDrawBuffer(GL_FRONT);
+   glRasterPos2i(width, height);
+   glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, &lensmap);
+   return;
+#endif
    B **lmap = lensmap;
    B *pmap = palimap;
    int x, y;
@@ -1684,6 +1690,17 @@ void render_lensmap()
          if (*lmap) {
             int lx = x+left;
             int ly = y+top;
+#ifdef GLQUAKE
+            glRasterPos2i(lx, height-ly);
+            if (colorcube) {
+               int i = *pmap;
+               glDrawPixels(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, i != 255 ? palmap[i][**lmap] : **lmap);
+            }
+            else {
+               //printf("glDrawPixels\n");
+               glDrawPixels(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, *lmap);
+            }
+#else
             if (colorcube) {
                int i = *pmap;
                *VBUFFER(lx,ly) = i != 255 ? palmap[i][**lmap] : **lmap;
@@ -1691,12 +1708,20 @@ void render_lensmap()
             else {
                *VBUFFER(lx,ly) = **lmap;
             }
+#endif
          }
 }
 
 // render a specific plate
 void render_plate(B* plate, vec3_t forward, vec3_t right, vec3_t up) 
 {
+   printf("render_plate\n");
+   printf("	forward: %f %f %f\n", forward[0], forward[1], forward[2]);
+   printf("	right:   %f %f %f\n", right[0], right[1], right[2]);
+   printf("	up:      %f %f %f\n", up[0], up[1], up[2]);
+   //forward, right, and up are a 3x3 rotation matrix.
+   //plate is one camera's worth of the environment map
+
    // set camera orientation
    VectorCopy(forward, r_refdef.forward);
    VectorCopy(right, r_refdef.right);
@@ -1706,6 +1731,9 @@ void render_plate(B* plate, vec3_t forward, vec3_t right, vec3_t up)
    R_PushDlights();
    R_RenderView();
 
+#ifdef GLQUAKE
+   glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, plate);
+#else
    // copy from vid buffer to cubeface, row by row
    B *vbuffer = VBUFFER(left,top);
    int y;
@@ -1716,10 +1744,12 @@ void render_plate(B* plate, vec3_t forward, vec3_t right, vec3_t up)
       vbuffer += vid.rowbytes;
       plate += platesize;
    }
+#endif
 }
 
 void L_RenderView() 
 {
+   printf("L_RenderView\n");
    static int pwidth = -1;
    static int pheight = -1;
 

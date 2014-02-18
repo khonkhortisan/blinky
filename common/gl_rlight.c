@@ -236,6 +236,7 @@ R_PushDlights
 void
 R_PushDlights(void)
 {
+	printf("gl_rlight.c R_PushDlights\n");
     int i;
     dlight_t *l;
 

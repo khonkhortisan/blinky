@@ -954,6 +954,7 @@ r_refdef must be set before the first call
 static void
 R_RenderView_(void)
 {
+	printf("r_main.c R_RenderView_\n");
     byte warpbuffer[WARP_WIDTH * WARP_HEIGHT];
 
     r_warpbuffer = warpbuffer;
@@ -1041,6 +1042,7 @@ R_RenderView_(void)
 void
 R_RenderView(void)
 {
+	printf("r_main.c R_RenderView\n");
     int dummy;
 #if 0
     /*

@@ -110,6 +110,7 @@ R_PushDlights
 void
 R_PushDlights(void)
 {
+	printf("r_light.c R_PushDlights\n");
     int i;
     dlight_t *l;
 

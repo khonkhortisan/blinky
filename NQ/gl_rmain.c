@@ -1156,6 +1156,7 @@ r_refdef must be set before the first call
 void
 R_RenderView(void)
 {
+	printf("gl_rmain.c R_RenderView \n");
     double time1 = 0, time2;
 
     if (r_norefresh.value)
